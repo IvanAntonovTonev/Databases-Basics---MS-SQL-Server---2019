@@ -272,3 +272,127 @@ RateApplied, TaxRate, OrderStatus) VALUES
 (1, 1, 1, 1.11, 1.11, 1.11, 1.11, GETDATE(), GETDATE(), GETDATE(), 1.11, 1.11, 1),
 (2, 2, 2, 2.22, 2.22, 2.22, 2.22, GETDATE(), GETDATE(), GETDATE(), 2.22, 2.22, 2),
 (3, 3, 3, 3.33, 3.33, 3.33, 3.33, GETDATE(), GETDATE(), GETDATE(), 3.33, 3.33, 3)
+
+
+--Problem 15.	Hotel Database
+CREATE DATABASE Hotel
+
+GO
+USE Hotel
+
+CREATE TABLE Employees (
+	Id INT PRIMARY KEY IDENTITY,
+	FirstName NVARCHAR(50) NOT NULL,
+	LastName NVARCHAR(50) NOT NULL,
+	Title NVARCHAR(50) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO Employees(FirstName, LastName, Title) VALUES
+('FirstName1', 'LastName1', 'Title1'),
+('FirstName2', 'LastName2', 'Title2'),
+('FirstName3', 'LastName3', 'Title3')
+
+
+CREATE TABLE Customers (
+	AccountNumber INT PRIMARY KEY IDENTITY,
+	FirstName NVARCHAR(50) NOT NULL,
+	LastName NVARCHAR(50) NOT NULL,
+	PhoneNumber NVARCHAR(20) NOT NULL,
+	EmergencyName NVARCHAR(50) NOT NULL,
+	EmergencyNumber NVARCHAR(20) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO Customers(FirstName, LastName, PhoneNumber, EmergencyName, EmergencyNumber) VALUES
+('FirstName1', 'LastName1', 'PhoneNumber1', 'EmergencyName1', 'EmergencyNumber1'),
+('FirstName2', 'LastName2', 'PhoneNumber2', 'EmergencyName2', 'EmergencyNumber2'),
+('FirstName3', 'LastName3', 'PhoneNumber3', 'EmergencyName3', 'EmergencyNumber3')
+
+
+CREATE TABLE RoomStatus (
+	RoomStatus NVARCHAR(50) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO RoomStatus(RoomStatus) VALUES
+('RoomStatus1'),
+('RoomStatus2'),
+('RoomStatus3')
+
+
+CREATE TABLE RoomTypes (
+	RoomType NVARCHAR(50) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO RoomTypes(RoomType) VALUES
+('RoomType1'),
+('RoomType2'),
+('RoomType3')
+
+
+CREATE TABLE BedTypes (
+	BedType NVARCHAR(50) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO BedTypes(BedType) VALUES
+('BedType1'),
+('BedType2'),
+('BedType3')
+
+
+CREATE TABLE Rooms (
+	RoomNumber INT UNIQUE,
+	RoomType NVARCHAR(50) NOT NULL,
+	BedType NVARCHAR(50) NOT NULL,
+	Rate NVARCHAR(20) NOT NULL,
+	RoomStatus NVARCHAR(50) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO Rooms(RoomNumber, RoomType, BedType, Rate, RoomStatus) VALUES
+(1, 'RoomType1', 'BedType1', 'Rate1', 'RoomStatus1'),
+(2, 'RoomType2', 'BedType2', 'Rate2', 'RoomStatus2'),
+(3, 'RoomType3', 'BedType3', 'Rate3', 'RoomStatus3')
+
+CREATE TABLE Payments (
+	Id INT PRIMARY KEY IDENTITY,
+	EmployeeId INT FOREIGN KEY REFERENCES Employees(Id) NOT NULL,
+	PaymentDate DATETIME2 NOT NULL,
+	AccountNumber INT FOREIGN KEY REFERENCES Customers(AccountNumber) NOT NULL,
+	FirstDateOccupied DATETIME2 NOT NULL,
+	LastDateOccupied DATETIME2 NOT NULL,
+	TotalDays DATETIME2 NOT NULL,
+	AmountCharged DECIMAL(7,3) NOT NULL,
+	TaxRate DECIMAL(6,2) NOT NULL,
+	TaxAmount DECIMAL(6,2) NOT NULL,
+	PaymentTotal DECIMAL(6,2) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO Payments(EmployeeId, PaymentDate, AccountNumber, 
+FirstDateOccupied, LastDateOccupied, TotalDays,
+AmountCharged, TaxRate, TaxAmount, PaymentTotal) VALUES
+(1, GETDATE(), 1, GETDATE(), GETDATE(), GETDATE(), 1.1, 1.1, 1.1, 1.1),
+(2, GETDATE(), 2, GETDATE(), GETDATE(), GETDATE(), 2.2, 2.2, 2.2, 2.2),
+(3, GETDATE(), 3, GETDATE(), GETDATE(), GETDATE(), 3.3, 3.3, 3.3, 3.3)
+
+
+CREATE TABLE Occupancies (
+	Id INT PRIMARY KEY IDENTITY,
+	EmployeeId INT FOREIGN KEY REFERENCES Employees(Id) NOT NULL,
+	DateOccupied DATETIME2 NOT NULL,
+	AccountNumber INT FOREIGN KEY REFERENCES Customers(AccountNumber) NOT NULL,
+	RoomNumber INT FOREIGN KEY REFERENCES Rooms(RoomNumber) NOT NULL,
+	RateApplied DECIMAL(5,2) NOT NULL,
+	PhoneCharge DECIMAL(5,2) NOT NULL,
+	Notes NVARCHAR(MAX)
+)
+
+INSERT INTO Occupancies(EmployeeId, DateOccupied, AccountNumber, 
+RoomNumber, RateApplied, PhoneCharge) VALUES
+(1, GETDATE(), 1, 1, 1.1, 1.1),
+(2, GETDATE(), 2, 2, 2.2, 2.2),
+(3, GETDATE(), 3, 3, 3.3, 3.3)
