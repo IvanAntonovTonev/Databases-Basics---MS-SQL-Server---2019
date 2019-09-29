@@ -77,16 +77,17 @@ ORDER BY Salary DESC
 USE Geography
 
 -- Problem 12.	Countries Holding ‘A’ 3 or More Times
-   SELECT CountryName, IsoCode
-     FROM Countries
-    WHERE CountryName LIKE '%A%A%A%'
+  SELECT CountryName, IsoCode
+    FROM Countries
+   WHERE CountryName LIKE '%A%A%A%'
 ORDER BY IsoCode ASC
 
 
 -- Problem 13.	 Mix of Peak and River Names
-SELECT p.PeakName, r.RiverName, LOWER(p.PeakName + SUBSTRING(r.RiverName, 2, Len(r.RiverName)) as Mix
-  FROM Peaks AS p, Rivers AS r
- WHERE SUBSTRING(p.PeakName, LEN(p.PeakName), 1) = (SUBSTRING(r.RiverName, 1, 1))
+   SELECT p.PeakName, r.RiverName, LOWER(p.PeakName + SUBSTRING(r.RiverName, 2, Len(r.RiverName))) as Mix
+     FROM Peaks AS p, Rivers AS r
+    WHERE SUBSTRING(p.PeakName, LEN(p.PeakName), 1) = (SUBSTRING(r.RiverName, 1, 1))
+ ORDER BY Mix ASC
 
 
 USE Diablo
